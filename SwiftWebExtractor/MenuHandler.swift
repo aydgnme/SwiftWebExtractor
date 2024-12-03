@@ -1,52 +1,122 @@
 import Foundation
 
 class MenuHandler {
+    private let webPageExtractor = WebPageExtractor()
+    private let socialMediaExtractor = SocialMediaExtractor()
+    private let scientificExtractor = ScientificArticleExtractor()
+    private let usvExtractor = USVExtractor()
+
     func showInteractiveMenu() {
         var shouldExit = false
 
-        var webPageExtractor = WebPageExtractor()
-        let socialMediaExtractor = SocialMediaExtractor()
-
         while !shouldExit {
-            print("""
-            Bine ați venit la SwiftWebExtractor!
+            printMenu()
 
-            Alegeți o opțiune:
-            1. Extrage link-uri din pagină web
-            2. Extrage informații din social media
-            3. Extrage articole științifice
-            4. Ieșire
-
-            Introduceți opțiunea (1-4):
-            """)
-
-            // Implementare pentru meniul interactiv
             if let choice = readLine() {
                 switch choice {
                 case "1":
-                    print("Introduceți URL-ul paginii web:")
-                    if let url = readLine() {
-                        Task {
-                            do {
-                                let links = try await webPageExtractor.extractLinks(from: url)
-                                print("Link-uri extrase: \(links)")
-                            } catch {
-                                print("Eroare la extragerea link-urilor: \(error)")
-                            }
-                        }
-                    }
+                    handleWebPageExtraction()
                 case "2":
-                    print("Extrage informații din social media")
-                // Aici adaugă logica pentru extragerea informațiilor din social media
+                    handleSocialMediaExtraction()
                 case "3":
-                    print("Extrage articole științifice")
-                // Aici adaugă logica pentru extragerea articolelor științifice
+                    handleScientificArticleExtraction()
                 case "4":
-                    print("Ieșire")
+                    handleScheduleExtraction()
+                case "5":
+                    print("The program is coming to an end...")
                     shouldExit = true
                 default:
-                    print("Opțiune invalidă. Vă rugăm să încercați din nou.")
+                    print("Invalid selection. Please try again.")
                 }
+            }
+        }
+    }
+
+    private func printMenu() {
+        print("""
+
+        Web Content Extractor
+        =========================================================
+        1. Extract link from web page
+        2. Extract social media content
+        3. Extract scientific article information
+        4. Extract USV program
+        5. Exit
+        =========================================================
+        Your choice (1-5):
+        """)
+    }
+
+    private func handleWebPageExtraction() {
+        print("Enter URL:")
+        guard let url = readLine() else { return }
+
+        Task {
+            do {
+                let links = try await webPageExtractor.extractLinks(from: url)
+                print("\nLinks found:")
+                links.forEach { print($0) }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleSocialMediaExtraction() {
+        print("Enter social media URL:")
+        guard let url = readLine() else { return }
+
+        Task {
+            do {
+                let profile = try await socialMediaExtractor.extractProfile(from: url)
+                print("\nProfile details:")
+                for (key, value) in profile {
+                    print("\(key): \(value)")
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleScientificArticleExtraction() {
+        print("Enter the article URL:")
+        guard let url = readLine() else { return }
+
+        Task {
+            do {
+                let articleInfo = try await scientificExtractor.extractArticleInfo(from: url)
+                print("\nArticle details:")
+                for (key, value) in articleInfo {
+                    print("\(key): \(value)")
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleScheduleExtraction() {
+        print("USV program URL'si giriniz:")
+        guard let url = readLine() else { return }
+
+        Task {
+            do {
+                let schedule = try await usvExtractor.extractUSVSchedule(from: url)
+                print("\nProgram:")
+                for (day, courses) in schedule {
+                    print("\n\(day):")
+                    for course in courses {
+                        print("-------------------")
+                        print("Ora: \(course["time"] ?? "")")
+                        print("Disciplina: \(course["subject"] ?? "")")
+                        print("Cadru didactic: \(course["teacher"] ?? "")")
+                        print("Sala: \(course["room"] ?? "")")
+                        print("Frecventa: \(course["frequency"] ?? "")")
+                    }
+                }
+            } catch {
+                print("Eroare la extragerea programului: \(error.localizedDescription)")
             }
         }
     }

@@ -11,6 +11,8 @@ enum RegexPatterns {
     // Profiluri social media
     static let socialMediaProfilePattern = #"(?i)@([a-z0-9_]+)"#
     static let facebookPattern = #"(?:https?:)?//(?:www\.)?facebook\.com/[a-zA-Z0-9.]+/?.*"#
+    static let twitterPattern = #"(?:https?:)?//(?:www\.)?twitter\.com/[a-zA-Z0-9_-]+/?.*"#
+    static let instagramPattern = #"(?:https?:)?//(?:www\.)?instagram\.com/[a-zA-Z0-9_-]+/?.*"#
     static let githubPattern = #"(?:https?:)?//(?:www\.)?github\.com/[a-zA-Z0-9-]+/?.*"#
     static let scholarPattern = #"(?:https?:)?//(?:www\.)?scholar\.google\.com/citations\?.*user=[a-zA-Z0-9_-]+"#
 

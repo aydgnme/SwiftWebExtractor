@@ -5,18 +5,35 @@ class WebPageExtractor {
 
     func extractLinks(from url: String) async throws -> [String] {
         let content = try await networkManager.fetchContent(from: url)
-        let regex = try NSRegularExpression(pattern: RegexPatterns.urlPattern)
-        let matches = regex.matches(in: content, range: NSRange(content.startIndex..., in: content))
-
-        return matches.compactMap { match in
-            guard let range = Range(match.range, in: content) else { return nil }
-            return String(content[range])
-        }
+        return try extractWithPattern(RegexPatterns.urlPattern, from: content)
     }
 
     func extractSchedule(from url: String) async throws -> [String] {
         let content = try await networkManager.fetchContent(from: url)
-        let regex = try NSRegularExpression(pattern: RegexPatterns.schedulePattern)
+        return try extractWithPattern(RegexPatterns.usvSchedulePattern, from: content)
+    }
+
+    func extractSocialMediaProfiles(from url: String) async throws -> [String: [String]] {
+        let content = try await networkManager.fetchContent(from: url)
+
+        // Links
+        let facebook = try extractWithPattern(RegexPatterns.facebookPattern, from: content)
+        let twitter = try extractWithPattern(RegexPatterns.twitterPattern, from: content)
+        let instagram = try extractWithPattern(RegexPatterns.instagramPattern, from: content)
+        let github = try extractWithPattern(RegexPatterns.githubPattern, from: content)
+        let scholar = try extractWithPattern(RegexPatterns.scholarPattern, from: content)
+
+        return [
+            "facebook": facebook,
+            "twitter": twitter,
+            "instagram": instagram,
+            "github": github,
+            "scholar": scholar,
+        ]
+    }
+
+    private func extractWithPattern(_ pattern: String, from content: String) throws -> [String] {
+        let regex = try NSRegularExpression(pattern: pattern)
         let matches = regex.matches(in: content, range: NSRange(content.startIndex..., in: content))
 
         return matches.compactMap { match in
