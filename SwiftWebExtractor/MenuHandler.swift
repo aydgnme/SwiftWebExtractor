@@ -3,6 +3,10 @@ import Foundation
 class MenuHandler {
     func showInteractiveMenu() {
         var shouldExit = false
+
+        var webPageExtractor = WebPageExtractor()
+        let socialMediaExtractor = SocialMediaExtractor()
+
         while !shouldExit {
             print("""
             Bine ați venit la SwiftWebExtractor!
@@ -20,8 +24,17 @@ class MenuHandler {
             if let choice = readLine() {
                 switch choice {
                 case "1":
-                    print("Extrage link-uri din pagină web")
-                // Aici adaugă logica pentru extragerea link-urilor
+                    print("Introduceți URL-ul paginii web:")
+                    if let url = readLine() {
+                        Task {
+                            do {
+                                let links = try await webPageExtractor.extractLinks(from: url)
+                                print("Link-uri extrase: \(links)")
+                            } catch {
+                                print("Eroare la extragerea link-urilor: \(error)")
+                            }
+                        }
+                    }
                 case "2":
                     print("Extrage informații din social media")
                 // Aici adaugă logica pentru extragerea informațiilor din social media
