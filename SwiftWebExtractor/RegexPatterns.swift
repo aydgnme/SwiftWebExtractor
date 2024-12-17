@@ -14,7 +14,7 @@ enum RegexPatterns {
     static let twitterPattern = #"(?:https?:)?//(?:www\.)?twitter\.com/[a-zA-Z0-9_-]+/?.*"#
     static let instagramPattern = #"(?:https?:)?//(?:www\.)?instagram\.com/[a-zA-Z0-9_-]+/?.*"#
     static let githubPattern = #"(?:https?:)?//(?:www\.)?github\.com/[a-zA-Z0-9-]+/?.*"#
-    static let scholarPattern = #"(?:https?:)?//(?:www\.)?scholar\.google\.com/citations\?.*user=[a-zA-Z0-9_-]+"#
+    static let scholarPattern = #"(?:https?:)?//(www\.)?scholar\.google\.com/citations\?.*user=[a-zA-Z0-9_-]+"#
 
     // Articole științifice
     static let articleTitlePattern = #"<title>(.*?)</title>"#

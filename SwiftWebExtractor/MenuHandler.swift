@@ -97,7 +97,7 @@ class MenuHandler {
     }
 
     private func handleScheduleExtraction() {
-        print("USV program URL'si giriniz:")
+        print("Introduceți URL-ul programului USV:")
         guard let url = readLine() else { return }
 
         Task {

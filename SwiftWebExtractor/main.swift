@@ -7,6 +7,7 @@
 
 import Foundation
 
-// Inițializare și rulare program principal
+
+
 let extractor = ContentExtractor()
 extractor.run()
